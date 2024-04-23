@@ -10,6 +10,8 @@ mysql:
   port: 3306
   log_level: dev
   db: gvb_server
+  max_idle_conns: 10
+  max_open_conns: 100
 logger:
   level: info
   prefix: '[gvb]'
