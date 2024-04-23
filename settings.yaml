@@ -1,0 +1,73 @@
+system:
+  host: 0.0.0.0
+  port: 8080
+  env: release
+mysql:
+  host: 127.0.0.1
+  user: root
+  password: root
+  config: charset=utf8&parseTime=true
+  port: 3306
+  log_level: dev
+  db: gvb_server
+logger:
+  level: info
+  prefix: '[gvb]'
+  director: log
+  show-line: true
+  log-in-console: true
+site_info:
+  created_at: "2023-09-15"
+  bei_an: 湘ICP备2021010654号-3
+  title: 晓晓知道
+  qq_image: http://sb94p9uw9.hn-bkt.clouddn.com/gvb/20240422150117__1713769277780535200.png
+  version: 8.0.1
+  email: 2663456523@qq.com
+  wechat_image: http://sb94p9uw9.hn-bkt.clouddn.com/gvb/20240421175551__1713693351355174700.png
+  name: 肖晓知道
+  job: 后端开发
+  addr: 湖南长沙
+  slogan: 肖晓知道
+  slogan_en: FFENGZHIDAO
+  web: http://www.xiaoxiaozhidao.com/
+  bilibili_url: https://space.bilibili.com/359151217
+  gitee_url: https://gitee.com/xiaoxiao
+  github_url: https://github.com/ErYueWink/
+qq:
+  app_id: 14r3rfewvt34ytvwctgw3g
+  key: 325v346y34t45y 45
+  redirect: http://blog.fengfengzhidao.com/login?flag=qq
+qi_niu:
+  enable: true
+  access_key: Ik2VBfw8z5kiya50pFhnfbwpQQUlvzAKDJ2VPfuK
+  secret_key: vPddIehjuvtEXhNHEv0VgMVdnAOgt5GRQ04kbHw8
+  bucket: xiaoxiaozhidao
+  cdn: http://sb94p9uw9.hn-bkt.clouddn.com/
+  zone: z2
+  prefix: "1001"
+  size: 6
+email:
+  host: smtp.qq.com
+  port: 465
+  user: 2543604745@qq.com
+  password: "123456"
+  default_from_email: 肖晓知道
+  use_ssl: true
+  user_tls: false
+jwt:
+  secret: fmkeo0j430fn03t32=gf=24kg-32
+  expires: 20
+  issuer: xiaoxiao
+upload:
+  size: 2
+  path: uploads/file
+redis:
+  ip: 127.0.0.1
+  port: 6379
+  password: xiaoxiao
+  pool_size: 0
+es:
+  host: http://192.168.66.176
+  port: 9200
+  username: ""
+  password: ""
