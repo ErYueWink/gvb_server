@@ -26,5 +26,4 @@ func InitConf() {
 	}
 	log.Println("YamlConf Unmarshal success")
 	global.Config = c
-	fmt.Println(global.Config)
 }
