@@ -60,3 +60,7 @@ qiniu:
   zone: z2
   prefix: "1001"
   size: 6
+# 上传文件配置
+upload:
+  size: 2
+  path: uploads/file

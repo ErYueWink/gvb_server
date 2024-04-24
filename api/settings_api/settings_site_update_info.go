@@ -8,7 +8,7 @@ import (
 	"gvb_server/utils/res"
 )
 
-// SettingsSiteUpdateInfo 修改网站信息
+// SettingsSiteUpdateInfoView 修改网站信息
 func (SettingsApi) SettingsSiteUpdateInfoView(c *gin.Context) {
 	var cr config.SiteInfo
 	err := c.ShouldBindJSON(&cr)
