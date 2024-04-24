@@ -5,6 +5,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"gvb_server/config"
 	"gvb_server/global"
+	"io/fs"
 	"io/ioutil"
 	"log"
 )
@@ -26,4 +27,18 @@ func InitConf() {
 	}
 	log.Println("YamlConf Unmarshal success")
 	global.Config = c
+}
+
+// SetYaml 修改Yaml文件
+func SetYaml() error {
+	// 将结构体转换为字节数组
+	bytes, err := yaml.Marshal(global.Config)
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(yamlFile, bytes, fs.ModePerm)
+	if err != nil {
+		return err
+	}
+	return nil
 }
