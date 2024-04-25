@@ -4,10 +4,26 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
+	"gvb_server/utils"
 	"gvb_server/utils/res"
 	"io/fs"
 	"os"
 	"path"
+	"strings"
+)
+
+var (
+	// WhiteImageList 白名单
+	WhiteImageList = []string{
+		"jpg",
+		"jpeg",
+		"png",
+		"gif",
+		"tiff",
+		"webp",
+		"svg",
+		"ico",
+	}
 )
 
 type FileUploadResponse struct {
@@ -46,6 +62,18 @@ func (ImagesApi) ImagesUploadView(c *gin.Context) {
 	var fileUploadResponse []FileUploadResponse
 	// 遍历上传的文件
 	for _, file := range files {
+		// 获取文件后缀名
+		fileName := file.Filename
+		nameList := strings.Split(fileName, ".")
+		suffix := strings.ToLower(nameList[len(nameList)-1])
+		if !utils.InList(suffix, WhiteImageList) {
+			fileUploadResponse = append(fileUploadResponse, FileUploadResponse{
+				FileName:  file.Filename,
+				IsSuccess: false,
+				Msg:       "文件非法",
+			})
+			continue
+		}
 		// 文件保存位置
 		filePath := path.Join(basePath, file.Filename)
 		// 计算上传的文件占几M
