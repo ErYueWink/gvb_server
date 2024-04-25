@@ -21,8 +21,8 @@ func (ImagesApi) ImagesUpdateView(c *gin.Context) {
 		return
 	}
 	var bannerModel models.BannerModel
-	count := global.DB.Take(&models.BannerModel{}, cr.ID).RowsAffected
-	if count == 0 {
+	err = global.DB.Take(&bannerModel, cr.ID).Error
+	if err != nil {
 		res.FailWithMsg("图片不存在", c)
 		return
 	}
