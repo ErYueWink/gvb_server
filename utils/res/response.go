@@ -1,6 +1,8 @@
 package res
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 const (
 	SUCCESS = 0
@@ -14,7 +16,7 @@ type Response struct {
 }
 
 type ListResponse[T any] struct {
-	List  []T   `json:"list"`
+	List  T     `json:"list"`
 	Count int64 `json:"count"`
 }
 
@@ -45,6 +47,14 @@ func OKWithData(data any, c *gin.Context) {
 // OKWith 请求成功
 func OKWith(c *gin.Context) {
 	Result(SUCCESS, "请求成功", map[string]interface{}{}, c)
+}
+
+// OKWithList 返回列表数据
+func OKWithList[T any](data T, count int64, c *gin.Context) {
+	OKWithData(ListResponse[any]{
+		Count: count,
+		List:  data,
+	}, c)
 }
 
 // Fail 请求失败
