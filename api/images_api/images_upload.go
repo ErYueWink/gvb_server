@@ -130,7 +130,6 @@ func (ImagesApi) ImagesUploadView(c *gin.Context) {
 				ImageType: ctype.QINIU,
 			})
 			continue
-
 		}
 		err = c.SaveUploadedFile(file, filePath)
 		if err != nil {
