@@ -2,6 +2,7 @@ package res
 
 import (
 	"github.com/gin-gonic/gin"
+	"gvb_server/utils"
 )
 
 const (
@@ -75,4 +76,10 @@ func FailErrorCode(code ErrorCode, c *gin.Context) {
 		return
 	}
 	Result(int(code), "系统未知错误，请反馈给管理员", map[string]interface{}{}, c)
+}
+
+// FailWithError 参数绑定失败
+func FailWithError(err error, obj any, c *gin.Context) {
+	msg := utils.GetValidMsg(err, obj)
+	FailWithMsg(msg, c)
 }
