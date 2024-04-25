@@ -27,9 +27,13 @@ func CommList[T any](model T, option Option) (list []T, count int64, err error) 
 	if option.Limit == 0 {
 		option.Limit = 10
 	}
+	// 排序字段，默认以时间倒序进行排序
+	if option.Sort == "" {
+		option.Sort = "created_at desc"
+	}
 	// 获取总条数
 	count = DB.Select("id").Find(&list).RowsAffected
 	// 分页查询
-	err = DB.Limit(option.Limit).Offset(offset).Find(&list).Error
+	err = DB.Limit(option.Limit).Offset(offset).Order(option.Sort).Find(&list).Error
 	return list, count, err
 }
