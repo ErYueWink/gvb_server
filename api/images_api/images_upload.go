@@ -5,6 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/global"
 	"gvb_server/models"
+	"gvb_server/models/ctype"
+	"gvb_server/plugins/qiniu"
 	"gvb_server/utils"
 	"gvb_server/utils/res"
 	"io"
@@ -107,6 +109,28 @@ func (ImagesApi) ImagesUploadView(c *gin.Context) {
 				Msg:       "图片重复",
 			})
 			continue
+		}
+		// 启用七牛云存储，就上传文件到七牛云
+		if global.Config.QiNiu.Enable {
+			qiniuFilePath, err := qiniu.UploadImage(fileBytes, fileName, "gvb")
+			if err != nil {
+				global.Log.Error(err.Error())
+				continue
+			}
+			fileUploadResponse = append(fileUploadResponse, FileUploadResponse{
+				FileName:  qiniuFilePath,
+				IsSuccess: true,
+				Msg:       "上传 文件至七牛云",
+			})
+			// 图片入库
+			global.DB.Create(&models.BannerModel{
+				Name:      fileName,
+				Hash:      imageHash,
+				Path:      filePath,
+				ImageType: ctype.QINIU,
+			})
+			continue
+
 		}
 		err = c.SaveUploadedFile(file, filePath)
 		if err != nil {
