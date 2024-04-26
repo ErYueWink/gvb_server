@@ -18,6 +18,14 @@ type SettingsUri struct {
 }
 
 // SettingsInfoView 获取某一项的配置文件信息
+// @Tags 系统管理
+// @Summary 显示某一项的配置信息
+// @Description 显示某一项的配置信息  site email qq qiniu jwt chat_group
+// @Param name path string  true  "name"
+// @Param token header string  true  "token"
+// @Router /api/settings/{name} [get]
+// @Produce json
+// @Success 200 {object} res.Response{}
 func (SettingsApi) SettingsInfoView(c *gin.Context) {
 	var cr SettingsUri
 	err := c.ShouldBindUri(&cr)

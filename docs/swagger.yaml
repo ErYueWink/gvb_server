@@ -1,0 +1,314 @@
+basePath: /
+definitions:
+  advert_api.AdvertRequest:
+    properties:
+      href:
+        description: 广告跳转链接
+        type: string
+      images:
+        description: 广告图片
+        type: string
+      is_show:
+        description: 是否显示
+        type: boolean
+      title:
+        description: 广告标题
+        type: string
+    required:
+    - href
+    - images
+    - title
+    type: object
+  config.SiteInfo:
+    properties:
+      addr:
+        type: string
+      bei_an:
+        type: string
+      bilibili_url:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      gitee_url:
+        type: string
+      github_url:
+        type: string
+      job:
+        type: string
+      name:
+        type: string
+      qq_image:
+        type: string
+      slogan:
+        type: string
+      slogan_en:
+        type: string
+      title:
+        type: string
+      version:
+        type: string
+      web:
+        type: string
+      wechat_image:
+        type: string
+    type: object
+  models.AdvertModel:
+    properties:
+      created_at:
+        description: 创建时间
+        type: string
+      href:
+        description: 跳转链接
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      images:
+        description: 图片
+        type: string
+      is_show:
+        description: 是否展示
+        type: boolean
+      title:
+        description: 显示的标题
+        type: string
+    type: object
+  models.RemoveRequest:
+    properties:
+      id_list:
+        items:
+          type: integer
+        type: array
+    type: object
+  res.ListResponse-models_AdvertModel:
+    properties:
+      count:
+        type: integer
+      list:
+        $ref: '#/definitions/models.AdvertModel'
+    type: object
+  res.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+host: 127.0.0.1:8080
+info:
+  contact: {}
+  description: 肖晓恋爱星球API文档
+  title: API文档
+  version: "1.0"
+paths:
+  /api/advert:
+    delete:
+      description: 批量删除广告
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 广告id列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.RemoveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 批量删除广告
+      tags:
+      - 广告管理API
+    get:
+      description: 广告列表
+      parameters:
+      - description: 搜索关键字
+        in: query
+        name: key
+        type: string
+      - description: 每页搜索条数
+        in: query
+        name: limit
+        type: integer
+      - description: 页数
+        in: query
+        name: page
+        type: integer
+      - description: 排序字段
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/res.ListResponse-models_AdvertModel'
+              type: object
+      summary: 广告列表
+      tags:
+      - 广告管理API
+    post:
+      description: 创建广告
+      parameters:
+      - description: 表示多个参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/advert_api.AdvertRequest'
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 创建广告
+      tags:
+      - 广告管理API
+  /api/advert/{id}:
+    put:
+      description: 更新广告
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 广告的一些参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/advert_api.AdvertRequest'
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 更新广告
+      tags:
+      - 广告管理API
+  /api/settings/{name}:
+    get:
+      description: 显示某一项的配置信息  site email qq qiniu jwt chat_group
+      parameters:
+      - description: name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 显示某一项的配置信息
+      tags:
+      - 系统管理
+    put:
+      description: 修改某一项的配置信息
+      parameters:
+      - description: name
+        in: path
+        name: name
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 修改某一项的配置信息
+      tags:
+      - 系统管理
+  /api/settings/site:
+    get:
+      description: 显示网站信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/config.SiteInfo'
+              type: object
+      summary: 显示网站信息
+      tags:
+      - 系统管理
+    put:
+      description: 编辑网站信息
+      parameters:
+      - description: 编辑网站信息的参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/config.SiteInfo'
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/config.SiteInfo'
+              type: object
+      summary: 编辑网站信息
+      tags:
+      - 系统管理
+swagger: "2.0"

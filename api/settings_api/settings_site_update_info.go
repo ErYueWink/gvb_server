@@ -9,6 +9,14 @@ import (
 )
 
 // SettingsSiteUpdateInfoView 修改网站信息
+// @Tags 系统管理
+// @Summary 编辑网站信息
+// @Description 编辑网站信息
+// @Param data body config.SiteInfo true "编辑网站信息的参数"
+// @Param token header string  true  "token"
+// @Router /api/settings/site [put]
+// @Produce json
+// @Success 200 {object} res.Response{data=config.SiteInfo}
 func (SettingsApi) SettingsSiteUpdateInfoView(c *gin.Context) {
 	var cr config.SiteInfo
 	err := c.ShouldBindJSON(&cr)
