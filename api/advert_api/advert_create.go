@@ -9,10 +9,10 @@ import (
 )
 
 type AdvertRequest struct {
-	Title  string `json:"title" struct:"title""`    // 广告标题
-	Href   string `json:"href" struct:"href"`       // 广告跳转链接
-	Images string `json:"images" struct:"images"`   // 广告图片
-	IsShow bool   `json:"is_show" struct:"is_show"` // 是否显示
+	Title  string `json:"title" binding:"required" msg:"请输入广告标题"  struct:"title""` // 广告标题
+	Href   string `json:"href" binding:"required" msg:"请输入广告跳转链接" struct:"href"`   // 广告跳转链接
+	Images string `json:"images" binding:"required" msg:"请输入广告图片" struct:"images"` // 广告图片
+	IsShow bool   `json:"is_show" struct:"is_show"`                                // 是否显示
 }
 
 // AdvertCreateView 创建广告

@@ -22,7 +22,7 @@ func (AdvertApi) AdvertRemoveView(c *gin.Context) {
 		res.FailWithMsg("广告不存在", c)
 		return
 	}
-	err = global.DB.Delete(advertList).Error
+	err = global.DB.Delete(&advertList).Error
 	if err != nil {
 		res.FailWithMsg("删除广告失败", c)
 		return
