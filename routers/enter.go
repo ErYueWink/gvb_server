@@ -20,5 +20,6 @@ func InitRouter() *gin.Engine {
 	routerGroup.SettingsRouter() // 系统配置
 	routerGroup.ImagesRouter()   // 文件上传配置
 	routerGroup.AdvertRouter()   // 广告管理
+	routerGroup.MenuRouter()     // 菜单管理
 	return router
 }
