@@ -8,8 +8,8 @@ import (
 	"gvb_server/utils/res"
 )
 
-// AdvertUploadView 修改广告
-func (AdvertApi) AdvertUploadView(c *gin.Context) {
+// AdvertUpdateView 修改广告
+func (AdvertApi) AdvertUpdateView(c *gin.Context) {
 	id := c.Param("id")
 	var cr AdvertRequest
 	err := c.ShouldBindJSON(&cr)
