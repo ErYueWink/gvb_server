@@ -18,6 +18,7 @@ func CommList[T any](model T, option Option) (list []T, count int64, err error) 
 	if option.Debug {
 		DB = global.DB.Session(&gorm.Session{Logger: global.MysqlLog})
 	}
+	query := DB.Where(model)
 	// 计算偏移量
 	offset := (option.Page - 1) * option.Limit
 	if offset < 0 {
@@ -32,8 +33,9 @@ func CommList[T any](model T, option Option) (list []T, count int64, err error) 
 		option.Sort = "created_at desc"
 	}
 	// 获取总条数
-	count = DB.Select("id").Find(&list).RowsAffected
+	count = query.Select("id").Find(&list).RowsAffected
+	query = DB.Where(model)
 	// 分页查询
-	err = DB.Limit(option.Limit).Offset(offset).Order(option.Sort).Find(&list).Error
+	err = query.Limit(option.Limit).Offset(offset).Order(option.Sort).Find(&list).Error
 	return list, count, err
 }
