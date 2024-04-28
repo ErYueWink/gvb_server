@@ -1,0 +1,20 @@
+package jwt
+
+import "github.com/dgrijalva/jwt-go/v4"
+
+// JwtPayLoad JWT的载荷信息
+type JwtPayLoad struct {
+	Username string `json:"username"`  // 用户名
+	NickName string `json:"nick_name"` // 昵称
+	Role     int    `json:"role"`      // 权限  1 管理员  2 普通用户  3 游客
+	UserID   uint   `json:"user_id"`   // 用户id
+	Avatar   string `json:"avatar"`
+}
+
+// MySecret 密钥
+var MySecret []byte
+
+type CustomClaims struct {
+	JwtPayLoad
+	jwt.StandardClaims
+}
