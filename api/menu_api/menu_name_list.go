@@ -8,9 +8,9 @@ import (
 )
 
 type MenuNameResponse struct {
-	ID   uint64 `json:"id"`
-	Name string `json:"name"`
-	Path string `json:"path"`
+	ID    uint64 `json:"id"`
+	Title string `json:"title"`
+	Path  string `json:"path"`
 }
 
 // MenuNameListView 菜单名称列表
@@ -22,7 +22,7 @@ type MenuNameResponse struct {
 // @Success 200 {object} res.Response{data=[]MenuNameResponse}
 func (MenuApi) MenuNameListView(c *gin.Context) {
 	var menuNameResponse []MenuNameResponse
-	err := global.DB.Find(&models.MenuModel{}).Select("id", "name", "path").Scan(&menuNameResponse).Error
+	err := global.DB.Model(models.MenuModel{}).Select("id", "title", "path").Scan(&menuNameResponse).Error
 	if err != nil {
 		res.FailWithMsg("查询菜单名称列表失败", c)
 		return

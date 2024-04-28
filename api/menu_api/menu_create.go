@@ -15,14 +15,14 @@ type ImageSort struct {
 }
 
 type MenuRequest struct {
-	Title         string      `json:"title" struct:"title"`
-	Path          string      `json:"path" struct:"path"`
-	Slogan        string      `json:"slogan" struct:"slogan"`
-	Abstract      ctype.Array `json:"abstract" struct:"abstract"`
-	AbstractTime  int         `json:"abstract_time" struct:"abstract_time"`
-	BannerTime    int         `json:"banner_time" struct:"banner_time"`
-	Sort          int         `json:"sort" struct:"sort"`
-	ImageSortList []ImageSort `json:"image_sort_list" struct:"-"`
+	Title         string      `json:"title" binding:"required" msg:"请完善菜单名称" structs:"title"`
+	Path          string      `json:"path" binding:"required" msg:"请完善菜单路径" structs:"path"`
+	Slogan        string      `json:"slogan" structs:"slogan"`
+	Abstract      ctype.Array `json:"abstract" structs:"abstract"`
+	AbstractTime  int         `json:"abstract_time" structs:"abstract_time"` // 切换的时间，单位秒
+	BannerTime    int         `json:"banner_time" structs:"banner_time"`     // 切换的时间，单位秒
+	Sort          int         `json:"sort" structs:"sort"`                   // 菜单的序号
+	ImageSortList []ImageSort `json:"image_sort_list" structs:"-"`           // 具体图片的顺序
 }
 
 // MenuCreateView 发布菜单

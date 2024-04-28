@@ -35,7 +35,7 @@ func (MenuApi) MenuDetailByPathView(c *gin.Context) {
 	}
 	var menuBannerModels []models.MenuBannerModel
 	// 查询中间表数据
-	err := global.DB.Preload("BannerModel").Order("sort desc").Find(&menuBannerModels, "menu_id = ?", menuModel.ID).Error
+	err = global.DB.Preload("BannerModel").Order("sort desc").Find(&menuBannerModels, "menu_id = ?", menuModel.ID).Error
 	if err != nil {
 		res.FailWithMsg("查询中间表数据失败", c)
 		return
