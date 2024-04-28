@@ -36,5 +36,9 @@ func SwitchOption(option Option) {
 		Makemigrations()
 		return
 	}
+	if option.User == "user" || option.User == "admin" {
+		CreateUser(option.User)
+		return
+	}
 	sys_flag.Usage()
 }
