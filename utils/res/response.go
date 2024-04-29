@@ -3,6 +3,7 @@ package res
 import (
 	"github.com/gin-gonic/gin"
 	"gvb_server/utils"
+	"net/http"
 )
 
 const (
@@ -23,7 +24,7 @@ type ListResponse[T any] struct {
 
 // Result 请求结果
 func Result(code int, msg string, data any, c *gin.Context) {
-	c.JSON(code, Response{
+	c.JSON(http.StatusOK, Response{
 		Code: code,
 		Msg:  msg,
 		Data: data,

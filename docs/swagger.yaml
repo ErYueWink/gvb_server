@@ -54,6 +54,139 @@ definitions:
       wechat_image:
         type: string
     type: object
+  ctype.ImageType:
+    enum:
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - LOCAL
+    - QINIU
+  ctype.Role:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-comments:
+      PermissionAdmin: 管理员
+      PermissionDisableUser: 被禁用的用户
+      PermissionUser: 普通登录人
+      PermissionVisitor: 游客
+    x-enum-varnames:
+    - PermissionAdmin
+    - PermissionUser
+    - PermissionVisitor
+    - PermissionDisableUser
+  ctype.SignStatus:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    type: integer
+    x-enum-varnames:
+    - SignQQ
+    - SignGitee
+    - SignEmail
+    - SignGithub
+    - SignVXNoPublic
+  menu_api.Banner:
+    properties:
+      id:
+        type: integer
+      path:
+        type: string
+    type: object
+  menu_api.ImageSort:
+    properties:
+      image_id:
+        type: integer
+      sort:
+        type: integer
+    type: object
+  menu_api.MenuNameResponse:
+    properties:
+      id:
+        type: integer
+      path:
+        type: string
+      title:
+        type: string
+    type: object
+  menu_api.MenuRequest:
+    properties:
+      abstract:
+        items:
+          type: string
+        type: array
+      abstract_time:
+        description: 切换的时间，单位秒
+        type: integer
+      banner_time:
+        description: 切换的时间，单位秒
+        type: integer
+      image_sort_list:
+        description: 具体图片的顺序
+        items:
+          $ref: '#/definitions/menu_api.ImageSort'
+        type: array
+      path:
+        type: string
+      slogan:
+        type: string
+      sort:
+        description: 菜单的序号
+        type: integer
+      title:
+        type: string
+    required:
+    - path
+    - title
+    type: object
+  menu_api.MenuResponse:
+    properties:
+      abstract:
+        description: 简介
+        items:
+          type: string
+        type: array
+      abstract_time:
+        description: 简介的切换时间
+        type: integer
+      banner:
+        items:
+          $ref: '#/definitions/menu_api.Banner'
+        type: array
+      banner_time:
+        description: 菜单图片的切换时间 为 0 表示不切换
+        type: integer
+      banners:
+        description: 菜单的图片列表
+        items:
+          $ref: '#/definitions/models.BannerModel'
+        type: array
+      created_at:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      path:
+        description: 路径
+        type: string
+      slogan:
+        description: slogan
+        type: string
+      sort:
+        description: 菜单的顺序
+        type: integer
+      title:
+        description: 标题
+        type: string
+    type: object
   models.AdvertModel:
     properties:
       created_at:
@@ -75,12 +208,85 @@ definitions:
         description: 显示的标题
         type: string
     type: object
+  models.BannerModel:
+    properties:
+      created_at:
+        description: 创建时间
+        type: string
+      hash:
+        description: 图片的hash值，用于判断重复图片
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      imageType:
+        allOf:
+        - $ref: '#/definitions/ctype.ImageType'
+        description: 文件类型 1：本地 2：七牛云
+      name:
+        description: 图片名称
+        type: string
+      path:
+        description: 图片路径
+        type: string
+    type: object
   models.RemoveRequest:
     properties:
       id_list:
         items:
           type: integer
         type: array
+    type: object
+  models.UserModel:
+    properties:
+      addr:
+        description: 地址
+        type: string
+      avatar_id:
+        description: 头像id
+        type: string
+      created_at:
+        description: 创建时间
+        type: string
+      email:
+        description: 邮箱
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      ip:
+        description: ip地址
+        type: string
+      nick_name:
+        description: 昵称
+        type: string
+      password:
+        description: 密码
+        type: string
+      role:
+        allOf:
+        - $ref: '#/definitions/ctype.Role'
+        description: 权限  1 管理员  2 普通用户  3 游客
+      sign_status:
+        allOf:
+        - $ref: '#/definitions/ctype.SignStatus'
+        description: 注册来源
+      tel:
+        description: 手机号
+        type: string
+      token:
+        description: 其他平台的唯一id
+        type: string
+      user_name:
+        description: 用户名
+        type: string
+    type: object
+  res.ListResponse-menu_api_MenuResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        $ref: '#/definitions/menu_api.MenuResponse'
     type: object
   res.ListResponse-models_AdvertModel:
     properties:
@@ -89,6 +295,13 @@ definitions:
       list:
         $ref: '#/definitions/models.AdvertModel'
     type: object
+  res.ListResponse-models_UserModel:
+    properties:
+      count:
+        type: integer
+      list:
+        $ref: '#/definitions/models.UserModel'
+    type: object
   res.Response:
     properties:
       code:
@@ -96,6 +309,30 @@ definitions:
       data: {}
       msg:
         type: string
+    type: object
+  user_api.UserLoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  user_api.UserUpdateRoleRequest:
+    properties:
+      nick_name:
+        type: string
+      role:
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        type: integer
+      user_id:
+        type: integer
+    required:
+    - role
+    - user_id
     type: object
 host: 127.0.0.1:8080
 info:
@@ -217,6 +454,158 @@ paths:
       summary: 更新广告
       tags:
       - 广告管理API
+  /api/email_login:
+    post:
+      description: 邮箱登录，返回token，用户信息需要从token中解码
+      parameters:
+      - description: 查询参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/user_api.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 邮箱登录
+      tags:
+      - 用户管理
+  /api/menu_names:
+    get:
+      description: 菜单名称列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/menu_api.MenuNameResponse'
+                  type: array
+              type: object
+      summary: 菜单名称列表
+      tags:
+      - 菜单管理
+  /api/menus:
+    delete:
+      description: 删除菜单
+      parameters:
+      - description: 查询参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.RemoveRequest'
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 删除菜单
+      tags:
+      - 菜单管理
+    get:
+      description: 菜单列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/res.ListResponse-menu_api_MenuResponse'
+              type: object
+      summary: 菜单列表
+      tags:
+      - 菜单管理
+    post:
+      description: 发布菜单
+      parameters:
+      - description: 查询参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/menu_api.MenuRequest'
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 发布菜单
+      tags:
+      - 菜单管理
+  /api/menus/{id}:
+    get:
+      description: 菜单详情
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/menu_api.MenuResponse'
+              type: object
+      summary: 菜单详情
+      tags:
+      - 菜单管理
+  /api/menus/detail:
+    get:
+      description: 菜单详情,根据路径查
+      parameters:
+      - in: query
+        name: path
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/menu_api.MenuResponse'
+              type: object
+      summary: 菜单详情,根据路径查
+      tags:
+      - 菜单管理
   /api/settings/{name}:
     get:
       description: 显示某一项的配置信息  site email qq qiniu jwt chat_group
@@ -311,4 +700,69 @@ paths:
       summary: 编辑网站信息
       tags:
       - 系统管理
+  /api/user_role:
+    put:
+      description: 用户权限变更
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 查询参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/user_api.UserUpdateRoleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 用户权限变更
+      tags:
+      - 用户管理
+  /api/users:
+    get:
+      description: 用户列表
+      parameters:
+      - description: 搜索关键字
+        in: query
+        name: key
+        type: string
+      - description: 每页搜索条数
+        in: query
+        name: limit
+        type: integer
+      - description: 页数
+        in: query
+        name: page
+        type: integer
+      - description: 排序字段
+        in: query
+        name: sort
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/res.ListResponse-models_UserModel'
+              type: object
+      summary: 用户列表
+      tags:
+      - 用户管理
 swagger: "2.0"

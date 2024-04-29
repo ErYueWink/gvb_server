@@ -10,4 +10,5 @@ func (r RouterGroup) UserRouter() {
 	r.POST("/email_login", app.UserApi.EmailLoginView)
 	r.GET("/users", middleware.JwtAuth(), app.UserApi.UserListView)
 	r.PUT("/user_role", middleware.JwtAuth(), app.UserApi.UserUpdateRoleView)
+	r.PUT("/user_password", middleware.JwtAuth(), app.UserApi.UserUpdatePasswordView)
 }

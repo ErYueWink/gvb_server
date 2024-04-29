@@ -19,7 +19,7 @@ type UserLoginRequest struct {
 // @Tags 用户管理
 // @Summary 邮箱登录
 // @Description 邮箱登录，返回token，用户信息需要从token中解码
-// @Param data body EmailLoginRequest  true  "查询参数"
+// @Param data body UserLoginRequest  true  "查询参数"
 // @Router /api/email_login [post]
 // @Produce json
 // @Success 200 {object} res.Response{}
