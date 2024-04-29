@@ -2,7 +2,7 @@ package jwt
 
 import "github.com/dgrijalva/jwt-go/v4"
 
-// JwtPayLoad JWT的载荷信息
+// JwtPayLoad jwt中payload数据
 type JwtPayLoad struct {
 	Username string `json:"username"`  // 用户名
 	NickName string `json:"nick_name"` // 昵称

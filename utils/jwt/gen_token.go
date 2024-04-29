@@ -12,9 +12,9 @@ func GenToken(user JwtPayLoad) (string, error) {
 	claim := CustomClaims{
 		user,
 		jwt.StandardClaims{
-			ExpiresAt: jwt.At(time.Now().Add(time.Duration(global.Config.Jwt.Expires))), // 过期时间
-			Issuer:    global.Config.Jwt.Issuer,                                         // 签发者
-			IssuedAt:  jwt.At(time.Now()),                                               // 签发时间
+			ExpiresAt: jwt.At(time.Now().Add(time.Hour * time.Duration(global.Config.Jwt.Expires))), // 过期时间
+			Issuer:    global.Config.Jwt.Issuer,                                                     // 签发者
+			IssuedAt:  jwt.At(time.Now()),                                                           // 签发时间
 		},
 	}
 	// 根据签名类型生成token

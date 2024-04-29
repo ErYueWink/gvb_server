@@ -14,3 +14,13 @@ func HashPwd(pwd string) string {
 	}
 	return string(hash)
 }
+
+// CheckPwd 校验密码
+func CheckPwd(hashPwd, pwd string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashPwd), []byte(pwd))
+	if err != nil {
+		global.Log.Error(err)
+		return false
+	}
+	return true
+}

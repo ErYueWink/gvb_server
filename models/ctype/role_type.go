@@ -11,23 +11,21 @@ const (
 	PermissionDisableUser Role = 4 // 被禁用的用户
 )
 
-// MarshalJson 转换为json
-func (r Role) MarshalJson() ([]byte, error) {
-	return json.Marshal(r.String())
+func (s Role) MarshalJSON() ([]byte, error) {
+	return json.Marshal(s.String())
 }
 
-// String 为枚举添加输出函数，将数字常量转换为字符串
-func (r Role) String() string {
+func (s Role) String() string {
 	var str string
-	switch r {
+	switch s {
 	case PermissionAdmin:
 		str = "管理员"
 	case PermissionUser:
-		str = "普通用户"
+		str = "用户"
 	case PermissionVisitor:
 		str = "游客"
 	case PermissionDisableUser:
-		str = "被禁言的用户"
+		str = "被禁用的用户"
 	default:
 		str = "其他"
 	}
