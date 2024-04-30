@@ -3,12 +3,12 @@ package config
 import "fmt"
 
 type Redis struct {
-	Host     string `yaml:"host"` // 主机
-	Port     int    `yaml:"port"` // 端口号
-	Password string `yaml:"password"`
-	PoolSize int    `yaml:"pool_size"` // 连接池大小
+	IP       string `json:"ip" yaml:"ip"`
+	Port     int    `json:"port" yaml:"port"`
+	Password string `json:"password" yaml:"password"`
+	PoolSize int    `json:"pool_size" yaml:"pool_size"`
 }
 
-func (r Redis) GetAddr() string {
-	return fmt.Sprintf("%s:%d", r.Host, r.Port)
+func (r Redis) Addr() string {
+	return fmt.Sprintf("%s:%d", r.IP, r.Port)
 }

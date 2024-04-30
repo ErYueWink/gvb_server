@@ -19,6 +19,7 @@ func main() {
 	// 初始化日志
 	global.Log = core.InitLogger()
 	global.DB = core.InitGorm() // 初始化数据库连接
+	global.Redis = core.InitConnectRedis()
 	// 路由初始化
 	addr := global.Config.System.Addr()
 	router := routers.InitRouter()
