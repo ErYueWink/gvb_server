@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
+	"gvb_server/service/redis_ser"
 	"gvb_server/utils/jwt"
 	"gvb_server/utils/res"
 )
@@ -19,6 +20,12 @@ func JwtAuth() gin.HandlerFunc {
 		claims, err := jwt.ParseToken(token)
 		if err != nil {
 			res.FailWithMsg("解析token失败", c)
+			c.Abort()
+			return
+		}
+		// 判断用户是否退出登录
+		if redis_ser.CheckLogout(token) {
+			res.FailWithMsg("用户退出登录", c)
 			c.Abort()
 			return
 		}
