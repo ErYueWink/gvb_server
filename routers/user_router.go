@@ -12,4 +12,5 @@ func (r RouterGroup) UserRouter() {
 	r.PUT("/user_role", middleware.JwtAuth(), app.UserApi.UserUpdateRoleView)
 	r.PUT("/user_password", middleware.JwtAuth(), app.UserApi.UserUpdatePasswordView)
 	r.POST("/logout", middleware.JwtAuth(), app.UserApi.LogoutView)
+	r.DELETE("/users", middleware.JwtAuth(), app.UserApi.UserRemoveView)
 }
