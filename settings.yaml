@@ -43,8 +43,8 @@ email:
   host: smtp.qq.com
   port: 465
   user: 2543604745@qq.com
-  password: "123456"
-  default_from_email: 肖晓恋爱星球
+  password: dxyfjimsbquhdjec
+  default_from_email: 肖晓知道
   use_ssl: true
   user_tls: false
 qq:

@@ -12,8 +12,8 @@ import (
 )
 
 type BindEmailRequest struct {
-	Email string `json:"email" binding:"required,email" msg:"请输入邮箱"`
-	Code  string `json:"code"`
+	Email string  `json:"email" binding:"required,email" msg:"请输入邮箱"`
+	Code  *string `json:"code"`
 }
 
 // UserBindEmailView 用户绑定邮箱
@@ -34,12 +34,12 @@ func (UserApi) UserBindEmailView(c *gin.Context) {
 		return
 	}
 	// 获取cookie中的载荷信息
-	_claim, _ := c.Get("claim")
+	_claim, _ := c.Get("claims")
 	claim := _claim.(*jwt.CustomClaims)
 	// 启用session
 	session := sessions.Default(c)
 	// 如果用户没有输入验证码，就向用户邮箱发送验证码
-	if cr.Code == "" {
+	if cr.Code == nil {
 		// 生成四位随机数
 		code := random.Code()
 		// 将验证码和邮箱保存到session中
@@ -69,7 +69,7 @@ func (UserApi) UserBindEmailView(c *gin.Context) {
 		res.FailWithMsg("邮箱输入错误", c)
 		return
 	}
-	if code != cr.Code {
+	if code != *cr.Code {
 		res.FailWithMsg("验证码输入错误", c)
 		return
 	}
@@ -86,5 +86,5 @@ func (UserApi) UserBindEmailView(c *gin.Context) {
 		res.FailWithMsg("修改用户失败", c)
 		return
 	}
-	res.OKWithMsg("修改用户成功", c)
+	res.OKWithMsg("用户绑定邮箱成功", c)
 }
