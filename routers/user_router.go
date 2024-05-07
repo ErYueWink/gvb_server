@@ -19,4 +19,5 @@ func (r RouterGroup) UserRouter() {
 	r.POST("/logout", middleware.JwtAuth(), app.UserApi.LogoutView)
 	r.DELETE("/users", middleware.JwtAuth(), app.UserApi.UserRemoveView)
 	r.POST("/user_bind_email", middleware.JwtAuth(), app.UserApi.UserBindEmailView)
+	r.POST("/users", middleware.JwtAuth(), app.UserApi.UserCreateView)
 }
