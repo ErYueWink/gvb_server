@@ -21,4 +21,5 @@ func (r RouterGroup) UserRouter() {
 	r.POST("/user_bind_email", middleware.JwtAuth(), app.UserApi.UserBindEmailView)
 	r.POST("/users", app.UserApi.UserCreateView)
 	r.GET("/user_info", middleware.JwtAuth(), app.UserApi.UserInfoView)
+	r.PUT("/user_info", middleware.JwtAuth(), app.UserApi.UserUpdateNickNameView)
 }
