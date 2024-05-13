@@ -34,7 +34,7 @@ func (MessageApi) MessageCreateView(c *gin.Context) {
 	// 发送者ID就是当前登录的用户ID
 	// 获取cookie中的载荷信息
 	_claims, _ := c.Get("claims")
-	claims := _claims.(jwt.CustomClaims)
+	claims := _claims.(*jwt.CustomClaims)
 	err = global.DB.Take(&sendUser, claims.UserID).Error
 	if err != nil {
 		global.Log.Error(err)

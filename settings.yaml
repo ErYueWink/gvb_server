@@ -69,3 +69,9 @@ redis:
   port: 6379
   pool_size: 100
   password: xiaoxiao
+# 搜索引擎
+es:
+  host: http://192.168.66.176
+  port: 9200
+  username: ""
+  password: ""

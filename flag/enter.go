@@ -40,5 +40,9 @@ func SwitchOption(option Option) {
 		CreateUser(option.User)
 		return
 	}
+	if option.ES == "create" {
+		ESCreateIndex()
+		return
+	}
 	sys_flag.Usage()
 }

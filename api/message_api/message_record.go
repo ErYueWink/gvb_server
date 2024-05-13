@@ -35,7 +35,7 @@ func (MessageApi) MessageRecordView(c *gin.Context) {
 	// 查询用户所有消息
 	var _messageList []models.MessageModel
 	var messageList = make([]models.MessageModel, 0)
-	err = global.DB.Find(_messageList, "send_user_id = ? or rev_user_id = ?", claims.UserID, claims.UserID).Error
+	err = global.DB.Find(&_messageList, "send_user_id = ? or rev_user_id = ?", claims.UserID, claims.UserID).Error
 	if err != nil {
 		global.Log.Error(err)
 		res.FailWithMsg("查询用户消息列表失败", c)
