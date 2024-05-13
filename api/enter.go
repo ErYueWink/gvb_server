@@ -2,6 +2,7 @@ package api
 
 import (
 	"gvb_server/api/advert_api"
+	"gvb_server/api/article_api"
 	"gvb_server/api/images_api"
 	"gvb_server/api/menu_api"
 	"gvb_server/api/message_api"
@@ -18,6 +19,7 @@ type ApiGroup struct {
 	UserApi     user_api.UserApi         // 用户管理
 	TagApi      tag_api.TagApi           // 标签管理
 	MessageApi  message_api.MessageApi   // 消息管理
+	ArticleApi  article_api.ArticleApi   // 文章管理
 }
 
 var ApiGroupApp = new(ApiGroup)

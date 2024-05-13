@@ -181,7 +181,8 @@ func (a ArticleModel) RemoveIndex() error {
 func (a *ArticleModel) Create() (err error) {
 	indexResponse, err := global.EsClient.Index().
 		Index(a.Index()).
-		BodyJson(a).Do(context.Background())
+		BodyJson(a).
+		Do(context.Background())
 	if err != nil {
 		logrus.Error(err.Error())
 		return err
