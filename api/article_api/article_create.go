@@ -2,12 +2,17 @@ package article_api
 
 import (
 	"fmt"
+	md "github.com/JohannesKaufmann/html-to-markdown"
+	"github.com/PuerkitoBio/goquery"
 	"github.com/gin-gonic/gin"
+	"github.com/russross/blackfriday"
 	"gvb_server/global"
 	"gvb_server/models"
 	"gvb_server/models/ctype"
 	"gvb_server/utils/jwt"
 	"gvb_server/utils/res"
+	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -46,6 +51,22 @@ func (ArticleApi) ArticleCreateView(c *gin.Context) {
 	// 获取用户ID、用户昵称
 	userId := claims.UserID
 	userNickName := claims.NickName
+	// 处理content 防止xss攻击
+	unsafe := blackfriday.MarkdownCommon([]byte(cr.Content))
+	// 是不是有script标签
+	doc, _ := goquery.NewDocumentFromReader(strings.NewReader(string(unsafe)))
+	nodes := doc.Find("script").Nodes
+	// 判断有没有script标签
+	if len(nodes) > 0 {
+		// 移除script标签
+		doc.Find("script").Remove()
+		converter := md.NewConverter("", true, nil)
+		// 获取html文本
+		html, _ := doc.Html()
+		// 将html文本转换为markdown格式
+		mdContent, _ := converter.ConvertString(html)
+		cr.Content = mdContent
+	}
 	// 如果用户没有输入简介则根据内容进行补全
 	if cr.Abstract == "" {
 		abs := []rune(cr.Content)
@@ -54,6 +75,17 @@ func (ArticleApi) ArticleCreateView(c *gin.Context) {
 		} else {
 			cr.Abstract = string(abs[:100])
 		}
+	}
+	// 如果不传bannerID就从后台随机选取一张
+	if cr.BannerID == 0 {
+		var bannerIDList []uint
+		global.DB.Model(models.BannerModel{}).Select("id").Scan(&bannerIDList)
+		if len(bannerIDList) == 0 {
+			res.FailWithMsg("没有图片数据", c)
+			return
+		}
+		rand.Seed(time.Now().UnixNano())
+		cr.BannerID = bannerIDList[rand.Intn(len(bannerIDList))]
 	}
 	// 根据图片ID查询图片路径
 	var bannerUrl string
@@ -88,6 +120,11 @@ func (ArticleApi) ArticleCreateView(c *gin.Context) {
 		BannerID:     cr.BannerID,
 		BannerUrl:    bannerUrl,
 		Tags:         cr.Tags,
+	}
+	// 在文章入库之前应该先判断文章是否已经存在
+	if article.IsExistData() {
+		res.FailWithMsg("文章已存在", c)
+		return
 	}
 	err = article.Create()
 	if err != nil {

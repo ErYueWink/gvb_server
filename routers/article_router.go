@@ -8,4 +8,5 @@ import (
 func (r RouterGroup) ArticleRouter() {
 	app := api.ApiGroupApp
 	r.POST("/articles", middleware.JwtAuth(), app.ArticleApi.ArticleCreateView)
+	r.GET("/articles", middleware.JwtAuth(), app.ArticleApi.ArticleListView)
 }
