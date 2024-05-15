@@ -3,6 +3,7 @@ package es_ser
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"github.com/olivere/elastic/v7"
 	"github.com/sirupsen/logrus"
 	"gvb_server/global"
@@ -105,5 +106,26 @@ func CommonDetail(id string) (model models.ArticleModel, err error) {
 		return
 	}
 	model.ID = res.Id
+	return model, err
+}
+
+// CommonDetailByTitle 根据标题查询文章详情
+func CommonDetailByTitle(key string) (model models.ArticleModel, err error) {
+	res, err := global.EsClient.
+		Search(models.ArticleModel{}.Index()).
+		Query(elastic.NewTermQuery("keyword", key)).Size(1).
+		Size(1).
+		Do(context.Background())
+	if err != nil {
+		logrus.Error(err)
+		return model, errors.New("查询文章详情失败")
+	}
+	hit := res.Hits.Hits[0]
+	err = json.Unmarshal(hit.Source, &model)
+	if err != nil {
+		logrus.Error(err)
+		return model, errors.New("查询文章详情失败")
+	}
+	model.ID = hit.Id
 	return model, err
 }
