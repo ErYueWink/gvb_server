@@ -112,11 +112,11 @@ func CommonDetail(id string) (model models.ArticleModel, err error) {
 // CommonDetailByTitle 根据标题查询文章详情
 func CommonDetailByTitle(key string) (model models.ArticleModel, err error) {
 	res, err := global.EsClient.
-		Search(models.ArticleModel{}.Index()).
+		Search().Index(models.ArticleModel{}.Index()).
 		Query(elastic.NewTermQuery("keyword", key)).Size(1).
 		Size(1).
 		Do(context.Background())
-	if err != nil {
+	if err != nil || res.Hits.TotalHits.Value == 0 {
 		logrus.Error(err)
 		return model, errors.New("查询文章详情失败")
 	}
