@@ -39,6 +39,11 @@ type ArticleModel struct {
 	Tags ctype.Array `json:"tags" structs:"tags"` // 文章标签
 }
 
+// 文章详情参数传递
+type ArticleDetailRequest struct {
+	ID uint `json:"id" form:"id" uri:"id"`
+}
+
 // Index 指定索引名称
 func (ArticleModel) Index() string {
 	return "article_index"

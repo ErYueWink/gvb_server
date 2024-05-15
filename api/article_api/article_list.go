@@ -2,6 +2,7 @@ package article_api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/liu-cn/json-filter/filter"
 	"gvb_server/global"
 	"gvb_server/models"
 	"gvb_server/service/es_ser"
@@ -10,18 +11,10 @@ import (
 
 type ArticleSearchRequest struct {
 	models.PageInfo
-	Tag string `form:"tag" json:"tag"`
+	Tag string `json:"tag" form:"tag"`
 }
 
-// ArticleListView 文章列表
-// @Tags 文章管理
-// @Summary 文章列表
-// @Description 文章列表
-// @Param data query ArticleSearchRequest   false  "表示多个参数"
-// @Param token header string  false  "token"
-// @Router /api/articles [get]
-// @Produce json
-// @Success 200 {object} res.Response{data=res.ListResponse[models.ArticleModel]}
+// ArticleListView 文章搜索接口
 func (ArticleApi) ArticleListView(c *gin.Context) {
 	var cr ArticleSearchRequest
 	err := c.ShouldBindQuery(&cr)
@@ -30,15 +23,15 @@ func (ArticleApi) ArticleListView(c *gin.Context) {
 		res.FailErrorCode(res.ArgumentError, c)
 		return
 	}
-	list, count, err := es_ser.ESComList(es_ser.Option{
+	list, count, err := es_ser.CommonList(es_ser.Option{
 		PageInfo: cr.PageInfo,
+		Field:    []string{"title", "abstract", "content"},
 		Tag:      cr.Tag,
-		Fields:   []string{"title", "abstract", "content"},
 	})
 	if err != nil {
 		global.Log.Error(err)
 		res.FailWithMsg("查询文章列表失败", c)
 		return
 	}
-	res.OKWithList(list, count, c)
+	res.OKWithList(filter.Omit("list", list), count, c)
 }

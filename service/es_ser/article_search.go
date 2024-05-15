@@ -12,47 +12,40 @@ import (
 
 type Option struct {
 	models.PageInfo
-	Fields []string
-	Tag    string
+	Field []string
+	Tag   string // java go python
 }
 
-func (o *Option) GetForm() int {
-	if o.Limit == 0 {
-		o.Limit = 10
+// GetForm
+func (option *Option) GetForm() int {
+	if option.Limit == 0 {
+		option.Limit = 10
 	}
-	form := (o.Page - 1) * o.Limit
+	form := (option.Page - 1) * option.Limit
 	if form < 0 {
 		form = 0
 	}
 	return form
 }
 
-// ESComList ES通用查询
-func ESComList(option Option) (list []models.ArticleModel, count int64, err error) {
-	// 构造复杂查询条件
+// CommonList ES通用列表询
+func CommonList(option Option) (list []models.ArticleModel, count int64, err error) {
 	boolSearch := elastic.NewBoolQuery()
-	// 如果关键字不为空，则根据关键字进行范围查询
 	if option.Key != "" {
-		boolSearch.Must(
-			elastic.NewMultiMatchQuery(option.Key, option.Fields...),
-		)
+		boolSearch.Must(elastic.NewMultiMatchQuery(option.Key, option.Field...))
 	}
-	// 如果标签不为空，则根据标签进行查询
 	if option.Tag != "" {
-		boolSearch.Must(
-			elastic.NewMultiMatchQuery(option.Tag, "tags"))
+		boolSearch.Must(elastic.NewMultiMatchQuery(option.Tag, "tags"))
 	}
-	// 排序
 	type SortField struct {
 		Field     string
-		Ascending bool // 默认asc
+		Ascending bool // 正序 asc
 	}
-	// 设置默认值
 	sortField := SortField{
 		Field:     "created_at",
 		Ascending: false,
 	}
-	if option.Sort != "" {
+	if option.Sort != "" { // created_at asc
 		_list := strings.Split(option.Sort, " ")
 		if len(_list) == 2 && (_list[1] == "asc" || _list[1] == "desc") {
 			sortField.Field = _list[0]
@@ -64,31 +57,53 @@ func ESComList(option Option) (list []models.ArticleModel, count int64, err erro
 			}
 		}
 	}
-	// 搜索
 	res, err := global.EsClient.
 		Search(models.ArticleModel{}.Index()).
-		Query(boolSearch).
-		From(option.GetForm()).Size(option.Limit).
+		From(option.GetForm()).
+		Size(option.Limit).
 		Sort(sortField.Field, sortField.Ascending).
 		Do(context.Background())
-	// 获取总条数
 	count = res.Hits.TotalHits.Value
 	var articleList []models.ArticleModel
-	// 遍历查询结果集
 	for _, hit := range res.Hits.Hits {
-		var articleModel models.ArticleModel
+		var article models.ArticleModel
 		data, err := hit.Source.MarshalJSON()
 		if err != nil {
 			logrus.Error(err)
 			continue
 		}
-		err = json.Unmarshal(data, &articleModel)
+		err = json.Unmarshal(data, &article)
 		if err != nil {
 			logrus.Error(err)
 			continue
 		}
-		articleModel.ID = hit.Id
-		articleList = append(articleList, articleModel)
+		article.ID = hit.Id
+		articleList = append(articleList, article)
 	}
 	return articleList, count, err
+}
+
+// CommonDetail 通用详情查询
+func CommonDetail(id string) (model models.ArticleModel, err error) {
+	res, err := global.EsClient.
+		Get().
+		Index(models.ArticleModel{}.Index()).
+		Id(id).
+		Do(context.Background())
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	data, err := res.Source.MarshalJSON()
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	err = json.Unmarshal(data, &model)
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	model.ID = res.Id
+	return model, err
 }
