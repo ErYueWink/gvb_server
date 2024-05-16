@@ -129,3 +129,16 @@ func CommonDetailByTitle(key string) (model models.ArticleModel, err error) {
 	model.ID = hit.Id
 	return model, err
 }
+
+func ArticleUpdate(id string, data map[string]any) error {
+	_, err := global.EsClient.
+		Update().Index(models.ArticleModel{}.Index()).
+		Id(id).Doc(data).
+		Refresh("true").
+		Do(context.Background())
+	if err != nil {
+		logrus.Error(err)
+		return err
+	}
+	return nil
+}
