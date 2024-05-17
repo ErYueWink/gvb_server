@@ -61,7 +61,7 @@ func (ArticleApi) ArticleCollCreateView(c *gin.Context) {
 	})
 	if err != nil {
 		global.Log.Error(err)
-		res.FailWithMsg("收藏文章/取消收藏成功", c)
+		res.FailWithMsg("收藏/取消收藏文章成功", c)
 		return
 	}
 	if num == 1 {
