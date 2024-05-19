@@ -12,5 +12,6 @@ func (r RouterGroup) ArticleRouter() {
 	r.GET("/articles/:id", middleware.JwtAuth(), app.ArticleApi.ArticleDetailView)
 	r.GET("/articles/detail", middleware.JwtAuth(), app.ArticleApi.ArticleDetailByTitleView)
 	r.GET("/articles/calendar", middleware.JwtAuth(), app.ArticleApi.ArticleCalendarView)
-	r.GET("/articles/collects", middleware.JwtAuth(), app.ArticleApi.ArticleCollCreateView)
+	r.GET("/articles/collects", middleware.JwtAuth(), app.ArticleApi.ArticleCollListView)
+	r.POST("/articles/collects", middleware.JwtAuth(), app.ArticleApi.ArticleCollCreateView)
 }
