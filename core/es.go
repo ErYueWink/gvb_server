@@ -4,6 +4,7 @@ import (
 	"github.com/olivere/elastic/v7"
 	"github.com/sirupsen/logrus"
 	"gvb_server/global"
+	"time"
 )
 
 func EsConnect() *elastic.Client {
@@ -13,6 +14,7 @@ func EsConnect() *elastic.Client {
 		elastic.SetURL(global.Config.Es.URL()),
 		sniffOpt,
 		elastic.SetBasicAuth(global.Config.Es.UserName, global.Config.Es.Password),
+		elastic.SetHealthcheckTimeout(time.Minute),
 	)
 	if err != nil {
 		logrus.Fatalf("es连接失败 %s", err.Error())

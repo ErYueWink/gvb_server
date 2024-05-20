@@ -30,5 +30,4 @@ func main() {
 	}
 	global.Log.Info(fmt.Printf("项目运行在%s", addr))
 	router.Run(addr)
-
 }
