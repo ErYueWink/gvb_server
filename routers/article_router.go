@@ -19,4 +19,5 @@ func (r RouterGroup) ArticleRouter() {
 	r.POST("/articles/digg", middleware.JwtAuth(), app.ArticleApi.ArticleDiggView)
 	r.GET("/article_id_title", middleware.JwtAuth(), app.ArticleApi.ArticleIDTitleListView)
 	r.GET("/categories", middleware.JwtAuth(), app.ArticleApi.ArticleCategoryListView)
+	r.GET("/articles/text", app.ArticleApi.FullTextSearchView)
 }
