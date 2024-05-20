@@ -13,3 +13,9 @@ func (c CountDB) Set(id string) error {
 	err := global.Redis.HSet(c.Index, id, num).Err()
 	return err
 }
+
+// Get 取出某个值的数据
+func (c CountDB) Get(id string) int {
+	count, _ := global.Redis.HGet(c.Index, id).Int()
+	return count
+}
