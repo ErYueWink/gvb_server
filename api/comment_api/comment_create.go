@@ -18,8 +18,16 @@ type CommentRequest struct {
 	ParentCommentID *uint  `json:"parent_comment_id"`
 }
 
-// CommentCreateRequest 发布评论
-func (CommentApi) CommentCreateRequest(c *gin.Context) {
+// CommentCreateView 发布评论
+// @Tags 评论管理
+// @Summary 发布评论
+// @Description 发布评论
+// @Param data body CommentRequest   true  "表示多个参数"
+// @Param token header string  true  "token"
+// @Router /api/comments [post]
+// @Produce json
+// @Success 200 {object} res.Response{}
+func (CommentApi) CommentCreateView(c *gin.Context) {
 	var cr CommentRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {
@@ -55,6 +63,7 @@ func (CommentApi) CommentCreateRequest(c *gin.Context) {
 		ArticleID:       cr.ArticleID,
 		Content:         cr.Content,
 		ParentCommentID: cr.ParentCommentID,
+		UserID:          claims.UserID,
 	}).Error
 	if err != nil {
 		res.FailWithMsg("发布评论失败", c)
