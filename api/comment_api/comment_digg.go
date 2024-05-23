@@ -23,7 +23,7 @@ type CommentIDRequest struct {
 // @Success 200 {object} res.Response{}
 func (CommentApi) CommentDigg(c *gin.Context) {
 	var cr CommentIDRequest
-	err := c.ShouldBindJSON(&cr)
+	err := c.ShouldBindUri(&cr)
 	if err != nil {
 		global.Log.Error(err)
 		res.FailErrorCode(res.ArgumentError, c)
