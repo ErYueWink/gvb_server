@@ -59,3 +59,20 @@ func FindSubComment(model models.CommentModel, subCommentList *[]models.CommentM
 	}
 	return
 }
+
+// FindSubCommentCount 递归查评论下的子评论数
+func FindSubCommentCount(model models.CommentModel) []models.CommentModel {
+	var subCommentList []models.CommentModel
+	FindSubCommentList(model, &subCommentList)
+	return subCommentList
+}
+
+// FindSubCommentList 递归查询评论下的子评论列表
+func FindSubCommentList(model models.CommentModel, subCommentList *[]models.CommentModel) {
+	global.DB.Preload("SubComments").Find(&model)
+	for _, sub := range model.SubComments {
+		*subCommentList = append(*subCommentList, sub)
+		FindSubComment(model, subCommentList)
+	}
+	return
+}
