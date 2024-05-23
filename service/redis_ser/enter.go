@@ -4,6 +4,7 @@ const (
 	articleLookPrefix    = "article_look"
 	articleDiggPrefix    = "article_digg"
 	articleCommentPrefix = "article_comment"
+	commentDiggPrefix    = "comment_digg"
 )
 
 // NewArticleLook 文章浏览量
@@ -24,5 +25,12 @@ func NewArticleDigg() CountDB {
 func NewArticleComment() CountDB {
 	return CountDB{
 		Index: articleCommentPrefix,
+	}
+}
+
+// NewCommentDigg 评论点赞
+func NewCommentDigg() CountDB {
+	return CountDB{
+		Index: commentDiggPrefix,
 	}
 }
