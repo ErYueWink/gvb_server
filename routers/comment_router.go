@@ -10,4 +10,5 @@ func (r RouterGroup) CommentRouter() {
 	r.POST("/comments", middleware.JwtAuth(), app.CommentCreateView)
 	r.GET("/comments/digg/:id", middleware.JwtAuth(), app.CommentDigg)
 	r.GET("/comments/:id", app.CommentListView)
+	r.GET("/comments/article", middleware.JwtAuth(), app.CommentByArticleListView)
 }
